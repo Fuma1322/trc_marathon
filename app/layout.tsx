@@ -18,9 +18,12 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Mookho Fuma | Film Production',
+  title: {
+    default: "TRC Race",
+    template: "%s | TRC Race Marathon",
+  },
   description:
-    'Explore the film, television, documentary, and creative production portfolio of Mookho Fuma.',
+    "Register for the TRC Race Marathon, explore race categories, and find payment instructions for your race entry.",
 };
 
 export default function RootLayout({

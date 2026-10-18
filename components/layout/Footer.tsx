@@ -1,107 +1,39 @@
-import Link from 'next/link';
+import Link from "next/link";
+import { Footprints, ArrowUpRight, Smartphone, Landmark, Wallet, Banknote, Send, MapPin } from "lucide-react";
 
-const navigationLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+const quickLinks = [
+  { label: "Home", href: "/" },
+  { label: "Register", href: "/register" },
+  { label: "Payment Instructions", href: "/payments" },
+  { label: "Login", href: "/login" },
 ];
-
-const socialLinks = [
-  { label: 'TikTok', href: 'https://www.tiktok.com/@cassy.ls31' },
-  { label: 'Facebook', href: 'https://www.facebook.com/cassydefuma.mookho' },
-  { label: 'WhatsApp', href: 'https://wa.me/+26659388613' },
+const paymentMethods = [
+  { label: "M-Pesa", icon: Smartphone },
+  { label: "Bank Transfer", icon: Landmark },
+  { label: "E-Wallet", icon: Wallet },
+  { label: "Instant Money", icon: Send },
+  { label: "Cash", icon: Banknote },
 ];
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="bg-[#271522] text-[#F6F0E8]">
-      {/* Main footer */}
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-12 lg:py-20">
-        <div className="grid gap-12 border-b border-white/10 pb-12 md:grid-cols-2 lg:grid-cols-[1.4fr_0.7fr_0.9fr] lg:gap-16">
-          {/* Brand */}
-          <div className="max-w-md">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center border border-[#C5A46D]/60 text-lg font-semibold tracking-tight text-[#C5A46D]">
-                MF
-              </span>
-
-              <span className="font-serif text-2xl tracking-wide">Mookho Fuma</span>
+    <footer className="bg-[#111111] text-white">
+      <div className="mx-auto max-w-7xl px-4 pb-12 pt-14 sm:px-6 sm:pt-16 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+          <div className="space-y-5">
+            <Link href="/" className="inline-flex items-center gap-3" aria-label="TRC Race home">
+              <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#25D366] text-[#111111]"><Footprints size={28} /></span>
+              <span><span className="block text-lg font-black uppercase tracking-tight">TRC</span><span className="block text-xs font-bold uppercase tracking-[0.25em] text-[#25D366]">Race</span></span>
             </Link>
-
-            <p className="mt-6 max-w-sm text-sm leading-7 text-[#F6F0E8]/65">
-              Bringing stories to life through film, television, and visual storytelling. Based in
-              Lesotho, inspired by the stories worth telling.
-            </p>
-
-            <p className="mt-5 text-xs uppercase tracking-[0.25em] text-[#C78691]">
-              Film · Television · Storytelling
-            </p>
+            <p className="max-w-xs text-sm leading-7 text-gray-400">Every step tells a story. Choose your distance and get ready to be part of the TRC Race running community.</p>
+            <div className="flex items-center gap-2 text-sm text-gray-400"><MapPin size={17} className="shrink-0 text-[#25D366]" /><span>Maseru, Lesotho</span></div>
           </div>
-
-          {/* Navigation */}
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.25em] text-[#C5A46D]">
-              Explore
-            </h2>
-
-            <nav aria-label="Footer navigation" className="mt-6 flex flex-col items-start gap-4">
-              {navigationLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-[#F6F0E8]/70 transition-colors duration-200 hover:text-[#C78691]"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Contact and social links */}
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-[0.25em] text-[#C5A46D]">
-              Let&apos;s Connect
-            </h2>
-
-            <p className="mt-6 max-w-xs text-sm leading-7 text-[#F6F0E8]/65">
-              Have a story to tell or a production in mind? Let&apos;s start a conversation.
-            </p>
-
-            <Link
-              href="/contact"
-              className="mt-5 inline-flex items-center gap-3 border-b border-[#C5A46D]/60 pb-2 text-sm text-[#F6F0E8] transition-colors hover:border-[#C78691] hover:text-[#C78691]"
-            >
-              Get in touch
-              <span aria-hidden="true">↗</span>
-            </Link>
-
-            <div className="mt-8 flex flex-wrap gap-x-5 gap-y-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Visit ${social.label}`}
-                  className="text-xs text-[#F6F0E8]/55 transition-colors hover:text-[#C78691]"
-                >
-                  {social.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom bar */}
-        <div className="flex flex-col gap-4 pt-7 text-xs text-[#F6F0E8]/45 sm:flex-row sm:items-center sm:justify-between">
-          <p className="tracking-wide text-[#25d366]/60">
-            © {currentYear} All rights reserved. Crafted by MPlug (Pty) Ltd.
-          </p>
+          <div><h2 className="mb-5 text-sm font-bold uppercase tracking-wider">Quick Links</h2><ul className="space-y-3.5">{quickLinks.map((link) => <li key={link.href}><Link href={link.href} className="group inline-flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-[#25D366]"><span>{link.label}</span><ArrowUpRight size={14} className="opacity-0 transition-opacity group-hover:opacity-100" /></Link></li>)}</ul></div>
+          <div><h2 className="mb-5 text-sm font-bold uppercase tracking-wider">Payment Methods</h2><ul className="space-y-4">{paymentMethods.map(({ label, icon: Icon }) => <li key={label} className="flex items-center gap-3 text-sm text-gray-400"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 text-[#25D366]"><Icon size={17} /></span>{label}</li>)}</ul><Link href="/payments" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[#25D366] hover:text-white">View instructions <ArrowUpRight size={15} /></Link></div>
+          <div><h2 className="mb-4 text-sm font-bold uppercase tracking-wider">Ready to Run?</h2><p className="mb-6 text-sm leading-7 text-gray-400">Choose your distance, complete your registration, and prepare for the finish line.</p><Link href="/register" className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3.5 text-sm font-bold text-[#111111] hover:bg-[#1fbd59] sm:w-auto">Register Now <ArrowUpRight size={17} /></Link></div>
         </div>
       </div>
+      <div className="border-t border-white/10"><div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-center sm:px-6 md:flex-row md:items-center md:justify-between md:text-left lg:px-8"><p className="text-xs leading-5 text-gray-500">© {new Date().getFullYear()} TRC Race. All rights reserved.</p><p className="text-xs text-gray-500">Made for runners. Built for the community.</p></div></div>
     </footer>
   );
 }
