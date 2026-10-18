@@ -25,10 +25,16 @@ export default function Footer() {
               <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[#111111]">
                 <Image src="/logo.png" alt="TRC Race Logo" width={75} height={75} />
               </span>
-              <span>
-                <span className="block text-lg font-black uppercase tracking-tight">TRC</span>
-                <span className="block text-xs font-bold uppercase tracking-[0.25em] text-[#25D366]">
-                  Race
+              <span className="flex flex-col justify-center">
+                <span className="text-[23px] font-black uppercase leading-none tracking-[-0.06em] text-[#80461B] sm:text-[26px]">
+                  TRC
+                </span>
+
+                <span className="mt-1 flex items-center gap-1.5">
+                  <span className="h-[3px] w-5 rounded-full bg-[#25D366]" />
+                  <span className="text-[10px] font-extrabold uppercase leading-none tracking-[0.28em] text-gray-500 sm:text-[11px]">
+                    RACE
+                  </span>
                 </span>
               </span>
             </Link>

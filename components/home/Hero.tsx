@@ -9,16 +9,15 @@ export default function Hero() {
       <div className="absolute -right-24 -top-24 -z-10 h-80 w-80 rounded-full bg-[#25D366]/20 blur-3xl" />
       <div className="mx-auto grid min-h-[600px] max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
         <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#25D366] backdrop-blur">
-            <span className="h-2 w-2 rounded-full bg-[#25D366]" />
-            One Heat • One Run • One Lesotho
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-bold uppercase tracking-[0.18em] text-blue-600 backdrop-blur">
+            <span className="h-2 w-2 rounded-full bg-blue-600" />
+            Lesotho 60 Years Independence Anniversary
           </span>
           <h1 className="mt-7 text-5xl font-black leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl">
             Beating El Niño<span className="mt-2 block text-[#25D366]">for Independence.</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-7 text-gray-200 sm:text-lg">
-            Choose your distance, register for TRC Race, and get ready to be part of a running
-            community built on energy, determination, and achievement.
+            One Heat • One Run • One Lesotho
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link

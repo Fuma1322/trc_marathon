@@ -22,7 +22,7 @@ export default function Navbar() {
 
           {/* Brand typography */}
           <span className="flex flex-col justify-center">
-            <span className="text-[23px] font-black uppercase leading-none tracking-[-0.06em] text-[#111111] sm:text-[26px]">
+            <span className="text-[23px] font-black uppercase leading-none tracking-[-0.06em] text-[#80461B] sm:text-[26px]">
               TRC
             </span>
 
