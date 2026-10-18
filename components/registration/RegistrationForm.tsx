@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
 import Input from '@/components/ui/Input';
 import { CheckCircle2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
 
 export default function RegistrationForm() {
   const router = useRouter();
