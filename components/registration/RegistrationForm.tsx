@@ -121,8 +121,9 @@ export default function RegistrationForm() {
       <label className="mt-6 flex items-start gap-3 text-sm leading-6 text-gray-600">
         <input type="checkbox" required className="mt-1 h-4 w-4 accent-[#25D366]" />
         <span>
-          I confirm that the details provided are accurate and understand that this demo does not
-          submit or save my registration.
+          I confirm that the details provided are accurate and understand that this information will
+          be used for race registration purposes only. I also acknowledge that my registration is
+          not confirmed until the organiser verifies payment.
         </span>
       </label>
 
