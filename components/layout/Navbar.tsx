@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Footprints } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Navbar() {
   return (
@@ -16,8 +17,8 @@ export default function Navbar() {
           aria-label="TRC Race home"
         >
           {/* Brand icon */}
-          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#25D366] text-[#111111] shadow-sm transition-all duration-300 group-hover:rotate-[-5deg] group-hover:scale-105">
-            <Footprints size={28} strokeWidth={2.5} />
+          <span className="flex h-12 w-12 items-center justify-center rounded-2xl text-[#111111] shadow-sm transition-all duration-300 group-hover:rotate-[-5deg] group-hover:scale-105">
+            <Image src="/logo.png" alt="TRC Race Logo" width={75} height={75} />
           </span>
 
           {/* Brand typography */}
