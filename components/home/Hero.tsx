@@ -111,7 +111,7 @@ export default function Hero() {
         </div>
 
         {/* Right: premium race pricing card */}
-        <div id="race-categories" className="w-full min-w-0 scroll-mt-24">
+        <div id="race-categories" className="mb-20 w-full min-w-0 scroll-mt-24">
           <div className="mx-auto max-w-md overflow-hidden rounded-3xl border border-white/50 bg-white/95 text-slate-900 shadow-2xl shadow-black/30 backdrop-blur-xl lg:ml-auto">
             <div className="relative overflow-hidden bg-blue-600 px-6 py-6 text-white sm:px-7">
               <div className="pointer-events-none absolute -right-8 -top-12 h-36 w-36 rounded-full border-[20px] border-white/10" />
