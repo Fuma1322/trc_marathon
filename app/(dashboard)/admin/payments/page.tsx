@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { Check, X } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
-import Button from '@/components/ui/Button';
 
 type Status = 'Pending' | 'Verified' | 'Rejected';
 const initialPayments = [
@@ -113,21 +112,20 @@ export default function AdminPaymentsPage() {
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex gap-2">
-                    <Button
+                    <button
                       className="px-3 py-2 text-xs"
                       disabled={payment.status === 'Verified'}
                       onClick={() => updateStatus(payment.id, 'Verified')}
                     >
                       <Check size={14} /> Verify
-                    </Button>
-                    <Button
-                      variant="outline"
+                    </button>
+                    <button
                       className="px-3 py-2 text-xs"
                       disabled={payment.status === 'Rejected'}
                       onClick={() => updateStatus(payment.id, 'Rejected')}
                     >
                       <X size={14} /> Reject
-                    </Button>
+                    </button>
                   </div>
                 </td>
               </tr>
