@@ -55,9 +55,8 @@ export default function Hero() {
           </div>
 
           <h1 className="mt-5 max-w-full break-words text-[clamp(2.8rem,8vw,5.5rem)] font-black leading-[0.96] tracking-[-0.045em] text-white [overflow-wrap:anywhere]">
-            One Heat.
-            <span className="mt-2 block text-blue-400">One Run.</span>
-            <span className="mt-2 block text-[#25D366]">One Lesotho.</span>
+            One Heat •<span className="mt-2 block text-blue-600">One Run •</span>
+            <span className="mt-2 block text-[#25D366]">One Lesotho •</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-lg font-semibold leading-7 text-white sm:text-xl">
