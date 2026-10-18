@@ -1,14 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LockKeyhole } from 'lucide-react';
 import Input from '@/components/ui/Input';
 
 // This is a UI demonstration only; authentication is not implemented.
 export default function LoginPage() {
-  const router = useRouter();
   const [message, setMessage] = useState('');
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

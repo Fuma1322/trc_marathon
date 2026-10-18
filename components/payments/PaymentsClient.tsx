@@ -220,7 +220,7 @@ export default function PaymentsClient() {
             type="submit"
             className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#111111]"
           >
-            I've followed these instructions
+            I&apos;ve followed these instructions
           </button>
           <p className="text-center text-xs leading-5 text-gray-500">
             Your entry is not confirmed until the organiser verifies your payment.
