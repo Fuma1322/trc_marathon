@@ -28,7 +28,7 @@ export default function Navbar() {
 
             <span className="mt-1 flex items-center gap-1.5">
               <span className="h-[3px] w-5 rounded-full bg-[#25D366]" />
-              <span className="text-[10px] font-extrabold uppercase leading-none tracking-[0.28em] text-gray-500 sm:text-[11px]">
+              <span className="text-[10px] font-extrabold uppercase leading-none tracking-[0.28em] text-[#111111] sm:text-[11px]">
                 RACE
               </span>
             </span>
