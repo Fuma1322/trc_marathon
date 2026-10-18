@@ -3,7 +3,7 @@ import { CalendarDays, MapPin } from 'lucide-react';
 
 export default function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-[#111111]">
+    <section className="relative isolate overflow-hidden bg-[#111111] p-4">
       <div className="absolute inset-0 -z-20 bg-[url('/marathon-hero.jpg')] bg-cover bg-center" />
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/90 via-black/65 to-black/20" />
       <div className="absolute -right-24 -top-24 -z-10 h-80 w-80 rounded-full bg-[#25D366]/20 blur-3xl" />
