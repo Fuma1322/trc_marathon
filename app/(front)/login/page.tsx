@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LockKeyhole } from 'lucide-react';
 import Input from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
 
 // This is a UI demonstration only; authentication is not implemented.
 export default function LoginPage() {
@@ -52,9 +51,12 @@ export default function LoginPage() {
               {message}
             </p>
           )}
-          <Button type="submit" className="w-full">
+          <button
+            type="submit"
+            className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#111111]"
+          >
             Sign in
-          </Button>
+          </button>
         </form>
         <p className="mt-6 text-center text-sm text-gray-500">
           New to TRC Race?{' '}

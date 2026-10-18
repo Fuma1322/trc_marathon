@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
 import Input from '@/components/ui/Input';
 import { CheckCircle2 } from 'lucide-react';
-import Button from '../ui/Button';
 
 export default function RegistrationForm() {
   const router = useRouter();
@@ -140,9 +139,12 @@ export default function RegistrationForm() {
         </p>
       )}
 
-      <Button type="submit" className="mt-7 w-full">
+      <button
+        type="submit"
+        className="mt-7 w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#111111]"
+      >
         Continue to payment instructions
-      </Button>
+      </button>
       <p className="mt-4 text-center text-xs leading-5 text-gray-500">
         Your registration is not confirmed until the organiser verifies payment.
       </p>

@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
 import { PAYMENT_DETAILS } from '@/lib/payment-details';
-import Button from '../ui/Button';
 
 const methodIcons = {
   mpesa: Smartphone,
@@ -84,10 +83,8 @@ export default function PaymentsClient() {
           <DetailRow label="Status" value="Awaiting verification (demo)" />
         </div>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <Button onClick={() => router.push('/registration-success')}>Continue</Button>
-          <Button variant="outline" onClick={() => setSubmitted(false)}>
-            Back to instructions
-          </Button>
+          <button onClick={() => router.push('/registration-success')}>Continue</button>
+          <button onClick={() => setSubmitted(false)}>Back to instructions</button>
         </div>
       </div>
     );
@@ -219,9 +216,12 @@ export default function PaymentsClient() {
               </p>
             </div>
           )}
-          <Button type="submit" className="w-full">
+          <button
+            type="submit"
+            className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#111111]"
+          >
             I've followed these instructions
-          </Button>
+          </button>
           <p className="text-center text-xs leading-5 text-gray-500">
             Your entry is not confirmed until the organiser verifies your payment.
           </p>
