@@ -8,7 +8,7 @@ export default function RaceCategories() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-green-700">
+        <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[#25d366]">
           Find your distance
         </p>
         <h2 className="mt-3 text-3xl font-black tracking-tight text-[#111111] sm:text-4xl">
