@@ -39,7 +39,7 @@ export default function Hero() {
 
         <div className="hidden lg:block">
           <div className="ml-auto max-w-sm rounded-3xl border border-white/15 bg-black/40 p-6 shadow-2xl backdrop-blur-xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#25D366]">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">
               Choose your challenge
             </p>
             <div className="mt-5 space-y-3">
