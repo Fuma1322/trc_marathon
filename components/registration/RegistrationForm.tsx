@@ -64,13 +64,6 @@ export default function RegistrationForm() {
           placeholder="+266 ..."
           required
         />
-        <Input label="Date of birth" name="dateOfBirth" type="date" autoComplete="bday" required />
-        <Input
-          label="National ID / Passport number"
-          name="identityNumber"
-          placeholder="Enter your ID or passport number"
-          required
-        />
         <div className="space-y-2">
           <label htmlFor="gender" className="block text-sm font-semibold text-gray-800">
             Gender

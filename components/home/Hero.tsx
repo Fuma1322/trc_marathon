@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, CalendarDays, MapPin, MoveRight } from 'lucide-react';
+import { CalendarDays, MapPin } from 'lucide-react';
 
 export default function Hero() {
   return (
@@ -11,10 +11,10 @@ export default function Hero() {
         <div className="max-w-2xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#25D366] backdrop-blur">
             <span className="h-2 w-2 rounded-full bg-[#25D366]" />
-            Every step moves us forward
+            One Heat • One Run • One Lesotho
           </span>
           <h1 className="mt-7 text-5xl font-black leading-[1.04] tracking-tight text-white sm:text-6xl lg:text-7xl">
-            Run for a<span className="mt-2 block text-[#25D366]">better tomorrow.</span>
+            Beating El Niño<span className="mt-2 block text-[#25D366]">for Independence.</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-7 text-gray-200 sm:text-lg">
             Choose your distance, register for TRC Race, and get ready to be part of a running
@@ -23,15 +23,9 @@ export default function Hero() {
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/register"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-7 py-4 text-sm font-extrabold text-[#111111] transition hover:bg-[#1fbd59]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-7 py-4 text-sm font-extrabold text-[#111111] transition hover:bg-[#1fbd59]"
             >
-              Register for the race <ArrowRight size={18} />
-            </Link>
-            <Link
-              href="/payments"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-4 text-sm font-bold text-white transition hover:bg-white/10"
-            >
-              Payment instructions <MoveRight size={17} />
+              Register for the race
             </Link>
           </div>
           <div className="mt-10 flex flex-wrap gap-x-7 gap-y-4 text-sm text-gray-200">
@@ -39,7 +33,7 @@ export default function Hero() {
               <MapPin size={17} className="text-[#25D366]" /> Maseru, Lesotho
             </span>
             <span className="flex items-center gap-2">
-              <CalendarDays size={17} className="text-[#25D366]" /> Event date to be announced
+              <CalendarDays size={17} className="text-[#25D366]" /> 14 November 2026
             </span>
           </div>
         </div>

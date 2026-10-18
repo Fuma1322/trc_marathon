@@ -83,8 +83,18 @@ export default function PaymentsClient() {
           <DetailRow label="Status" value="Awaiting verification (demo)" />
         </div>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <button onClick={() => router.push('/registration-success')}>Continue</button>
-          <button onClick={() => setSubmitted(false)}>Back to instructions</button>
+          <button
+            onClick={() => router.push('/registration-success')}
+            className="h-[44px] w-[120px] rounded-xl border bg-[#111111] text-white hover:bg-[#25d366]"
+          >
+            Continue
+          </button>
+          <button
+            onClick={() => setSubmitted(false)}
+            className="h-[44px] w-[250px] rounded-xl border bg-[#25d366] text-white hover:bg-[#111111]"
+          >
+            Back to instructions
+          </button>
         </div>
       </div>
     );
@@ -143,7 +153,6 @@ export default function PaymentsClient() {
           {method === 'mpesa' && (
             <>
               <DetailRow label="Recipient" value={PAYMENT_DETAILS.mpesa.recipient} />
-              <DetailRow label="Payment number" value={PAYMENT_DETAILS.mpesa.number} />
               <DetailRow label="Till / reference" value={PAYMENT_DETAILS.mpesa.tillOrReference} />
             </>
           )}
