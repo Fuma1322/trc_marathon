@@ -4,6 +4,7 @@ import { CheckCircle2, ClipboardCheck, Home } from 'lucide-react';
 
 import prisma from '@/lib/db';
 import { RACE_CATEGORIES, PAYMENT_METHODS } from '@/lib/constants';
+import { fireConfetti } from '@/components/ui/confetti-demo';
 
 type Props = {
   searchParams: {
@@ -72,13 +73,14 @@ export default async function RegistrationSuccessPage({ searchParams }: Props) {
             is assigned.
           </p>
         </div>
-
-        <Link
-          href="/"
-          className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3.5 text-sm font-bold text-[#111111] transition hover:bg-[#1fbd59]"
-        >
-          <Home size={17} />
-          Finish and return home
+        <Link href="/">
+          <button
+            onClick={fireConfetti}
+            className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-6 py-3.5 text-sm font-bold text-[#111111] transition hover:bg-[#1fbd59]"
+          >
+            <Home size={17} />
+            Finish
+          </button>
         </Link>
       </div>
     </section>

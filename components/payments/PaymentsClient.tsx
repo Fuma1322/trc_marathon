@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
 import { PAYMENT_DETAILS } from '@/lib/payment-details';
 import { submitRegistrationPayment } from '@/actions/payments';
-import { fireConfetti } from '../ui/confetti-demo';
 
 const methodIcons = {
   mpesa: Smartphone,
@@ -235,7 +234,6 @@ export default function PaymentsClient() {
 
           <button
             type="submit"
-            onClick={fireConfetti}
             disabled={isSubmitting || !registrationId}
             className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-[#111111] transition hover:bg-[#111111] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
