@@ -60,7 +60,7 @@ export async function createRegistration(input: unknown) {
       },
     });
 
-    revalidatePath('/dashboard/registrations');
+    revalidatePath('/');
 
     return {
       data: {
