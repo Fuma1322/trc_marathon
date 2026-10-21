@@ -2,23 +2,13 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import {
-  Banknote,
-  CheckCircle2,
-  CircleAlert,
-  Landmark,
-  Send,
-  Smartphone,
-  Wallet,
-} from 'lucide-react';
+import { Banknote, CheckCircle2, CircleAlert, Landmark, Smartphone } from 'lucide-react';
 import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
 import { PAYMENT_DETAILS } from '@/lib/payment-details';
 
 const methodIcons = {
   mpesa: Smartphone,
   'bank-transfer': Landmark,
-  'e-wallet': Wallet,
-  'instant-money': Send,
   cash: Banknote,
 };
 
@@ -46,10 +36,6 @@ export default function PaymentsClient() {
         return PAYMENT_DETAILS.mpesa;
       case 'bank-transfer':
         return PAYMENT_DETAILS.bankTransfer;
-      case 'e-wallet':
-        return PAYMENT_DETAILS.eWallet;
-      case 'instant-money':
-        return PAYMENT_DETAILS.instantMoney;
       case 'cash':
         return PAYMENT_DETAILS.cash;
     }
@@ -166,20 +152,6 @@ export default function PaymentsClient() {
               />
               <DetailRow label="Branch" value={PAYMENT_DETAILS.bankTransfer.branch} />
               <DetailRow label="Reference" value={PAYMENT_DETAILS.bankTransfer.reference} />
-            </>
-          )}
-          {method === 'e-wallet' && (
-            <>
-              <DetailRow label="Provider" value={PAYMENT_DETAILS.eWallet.provider} />
-              <DetailRow label="Recipient" value={PAYMENT_DETAILS.eWallet.recipient} />
-              <DetailRow label="Wallet number" value={PAYMENT_DETAILS.eWallet.number} />
-            </>
-          )}
-          {method === 'instant-money' && (
-            <>
-              <DetailRow label="Provider" value={PAYMENT_DETAILS.instantMoney.provider} />
-              <DetailRow label="Recipient" value={PAYMENT_DETAILS.instantMoney.recipient} />
-              <DetailRow label="Recipient number" value={PAYMENT_DETAILS.instantMoney.number} />
             </>
           )}
           {method === 'cash' && (
