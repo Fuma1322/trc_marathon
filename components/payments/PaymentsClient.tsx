@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Banknote, CheckCircle2, CircleAlert, Landmark, Smartphone } from 'lucide-react';
+import { Banknote, CircleAlert, Landmark, Smartphone } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
@@ -14,20 +14,6 @@ const methodIcons = {
   mpesa: Smartphone,
   'bank-transfer': Landmark,
   cash: Banknote,
-};
-
-type Submission = {
-  id: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  raceCategory: string;
-  entryFee: number;
-  paymentMethod: string | null;
-  paymentReference: string | null;
-  paymentStatus: string;
-  registrationStatus: string;
-  raceNumber: string | null;
 };
 
 function DetailRow({ label, value }: { label: string; value: string }) {
@@ -51,7 +37,6 @@ export default function PaymentsClient() {
   const [method, setMethod] = useState<PaymentMethodId>('mpesa');
   const [reference, setReference] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submission, setSubmission] = useState<Submission | null>(null);
 
   const instructions =
     method === 'mpesa'
@@ -93,81 +78,15 @@ export default function PaymentsClient() {
         return;
       }
 
-      setSubmission(response.data);
-      toast.success('Your registration details have been submitted.');
+      toast.success('Your payment details have been submitted.');
+
+      router.replace(`/registration-success?registration=${encodeURIComponent(response.data.id)}`);
     } catch (error) {
       console.error('PAYMENT FORM ERROR:', error);
       toast.error('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
-  }
-
-  // Confirmation after the server has saved the payment details.
-  if (submission) {
-    const submittedRace =
-      RACE_CATEGORIES.find((item) => item.id === submission.raceCategory) ?? race;
-
-    const submittedMethod =
-      PAYMENT_METHODS.find((item) => item.id === submission.paymentMethod)?.name ??
-      submission.paymentMethod ??
-      'Not provided';
-
-    return (
-      <div className="rounded-3xl border border-green-100 bg-white p-6 text-center shadow-sm sm:p-12">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-800">
-          <CheckCircle2 size={34} />
-        </div>
-
-        <p className="mt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-green-700">
-          TRC Race
-        </p>
-
-        <h2 className="mt-2 text-2xl font-black">Payment details submitted!</h2>
-
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-gray-600">
-          Thank you, {submission.fullName}. Your registration details have been saved. Please keep
-          your registration reference for future enquiries.
-        </p>
-
-        <div className="mx-auto mt-6 max-w-lg rounded-2xl bg-gray-50 p-5 text-left">
-          <h3 className="mb-2 text-base font-extrabold">Your registration summary</h3>
-
-          <DetailRow label="Full name" value={submission.fullName} />
-          <DetailRow label="Race category" value={submittedRace.name} />
-          <DetailRow label="Entry fee" value={`M${submission.entryFee}`} />
-          <DetailRow label="Payment method" value={submittedMethod} />
-
-          {submission.paymentReference && (
-            <DetailRow label="Transaction reference" value={submission.paymentReference} />
-          )}
-
-          <DetailRow label="Payment status" value="Pending verification" />
-          <DetailRow label="Registration status" value="Pending approval" />
-          <DetailRow label="Race number" value={submission.raceNumber ?? 'Not assigned yet'} />
-        </div>
-
-        <div className="mx-auto mt-5 flex max-w-lg items-start gap-3 rounded-2xl bg-amber-50 p-4 text-left text-amber-900">
-          <CircleAlert size={20} className="mt-0.5 shrink-0" />
-          <p className="text-xs leading-5">
-            Keep your payment confirmation or cash receipt. Your entry is not approved until the
-            organiser verifies the payment and approves your registration.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            fireConfetti();
-
-            router.push(`/registration-success?registration=${encodeURIComponent(submission.id)}`);
-          }}
-          className="mt-6 w-full rounded-xl bg-[#111111] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#25D366] sm:w-auto"
-        >
-          Finish registration
-        </button>
-      </div>
-    );
   }
 
   return (
@@ -316,6 +235,7 @@ export default function PaymentsClient() {
 
           <button
             type="submit"
+            onClick={fireConfetti}
             disabled={isSubmitting || !registrationId}
             className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-[#111111] transition hover:bg-[#111111] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
