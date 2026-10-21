@@ -13,7 +13,7 @@ export default function Hero() {
     <section className="relative isolate w-full min-w-0 overflow-hidden bg-slate-950 text-white">
       {/* Race photography: keep the image visible and vibrant */}
       <div
-        className="absolute inset-0 -z-30 bg-[url('/marathon-hero.jpg')] bg-cover"
+        className="absolute inset-0 -z-30 bg-[url('/marathon-hero.png')] bg-cover"
         aria-hidden="true"
       />
 
