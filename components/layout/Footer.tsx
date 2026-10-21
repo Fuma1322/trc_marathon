@@ -20,8 +20,6 @@ const quickLinks = [
 const paymentMethods = [
   { label: 'M-Pesa', icon: Smartphone },
   { label: 'Bank Transfer', icon: Landmark },
-  { label: 'E-Wallet', icon: Wallet },
-  { label: 'Instant Money', icon: Send },
   { label: 'Cash', icon: Banknote },
 ];
 

@@ -49,12 +49,7 @@ export const PAYMENT_METHODS = [
     name: 'Bank Transfer',
     description: 'Transfer the entry fee to the event bank account.',
   },
-  { id: 'e-wallet', name: 'E-Wallet', description: 'Pay using the supported e-wallet service.' },
-  {
-    id: 'instant-money',
-    name: 'Instant Money',
-    description: 'Send money using an Instant Money service.',
-  },
+
   { id: 'cash', name: 'Cash', description: 'Pay at an approved registration point.' },
 ] as const;
 
