@@ -1,15 +1,33 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Banknote, CheckCircle2, CircleAlert, Landmark, Smartphone } from 'lucide-react';
+import toast from 'react-hot-toast';
+
 import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
 import { PAYMENT_DETAILS } from '@/lib/payment-details';
+import { submitRegistrationPayment } from '@/actions/payments';
+import { fireConfetti } from '../ui/confetti-demo';
 
 const methodIcons = {
   mpesa: Smartphone,
   'bank-transfer': Landmark,
   cash: Banknote,
+};
+
+type Submission = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  raceCategory: string;
+  entryFee: number;
+  paymentMethod: string | null;
+  paymentReference: string | null;
+  paymentStatus: string;
+  registrationStatus: string;
+  raceNumber: string | null;
 };
 
 function DetailRow({ label, value }: { label: string; value: string }) {
@@ -24,95 +42,173 @@ function DetailRow({ label, value }: { label: string; value: string }) {
 export default function PaymentsClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const raceId = searchParams.get('race');
+  const registrationId = searchParams.get('registration');
+
   const race = RACE_CATEGORIES.find((item) => item.id === raceId) ?? RACE_CATEGORIES[1];
+
   const [method, setMethod] = useState<PaymentMethodId>('mpesa');
   const [reference, setReference] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submission, setSubmission] = useState<Submission | null>(null);
 
-  const instructions = useMemo(() => {
-    switch (method) {
-      case 'mpesa':
-        return PAYMENT_DETAILS.mpesa;
-      case 'bank-transfer':
-        return PAYMENT_DETAILS.bankTransfer;
-      case 'cash':
-        return PAYMENT_DETAILS.cash;
-    }
-  }, [method]);
+  const instructions =
+    method === 'mpesa'
+      ? PAYMENT_DETAILS.mpesa
+      : method === 'bank-transfer'
+        ? PAYMENT_DETAILS.bankTransfer
+        : PAYMENT_DETAILS.cash;
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const selectedMethodName = PAYMENT_METHODS.find((item) => item.id === method)?.name ?? method;
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (method !== 'cash' && !reference.trim()) return;
-    // Demo only: this does not send proof to a server or verify a transaction.
-    setSubmitted(true);
+
+    if (!registrationId) {
+      toast.error('Your registration reference is missing. Please register first.');
+      return;
+    }
+
+    if (method !== 'cash' && !reference.trim()) {
+      toast.error('Please enter your transaction reference.');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const response = await submitRegistrationPayment({
+        registrationId,
+        method,
+        reference: method === 'cash' ? undefined : reference.trim(),
+      });
+
+      if (response.status !== 200 || !response.data) {
+        toast.error(
+          typeof response.error === 'string'
+            ? response.error
+            : 'Unable to submit your payment details.'
+        );
+        return;
+      }
+
+      setSubmission(response.data);
+      toast.success('Your registration details have been submitted.');
+    } catch (error) {
+      console.error('PAYMENT FORM ERROR:', error);
+      toast.error('Something went wrong. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
-  if (submitted) {
+  // Confirmation after the server has saved the payment details.
+  if (submission) {
+    const submittedRace =
+      RACE_CATEGORIES.find((item) => item.id === submission.raceCategory) ?? race;
+
+    const submittedMethod =
+      PAYMENT_METHODS.find((item) => item.id === submission.paymentMethod)?.name ??
+      submission.paymentMethod ??
+      'Not provided';
+
     return (
-      <div className="rounded-3xl border border-green-100 bg-white p-8 text-center shadow-sm sm:p-12">
+      <div className="rounded-3xl border border-green-100 bg-white p-6 text-center shadow-sm sm:p-12">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-800">
           <CheckCircle2 size={34} />
         </div>
-        <h2 className="mt-5 text-2xl font-black">Payment details recorded for this demo</h2>
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-gray-600">
-          No payment information has been sent to TRC Race. In the live app, this step will submit
-          your reference for organiser review.
+
+        <p className="mt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-green-700">
+          TRC Race
         </p>
-        <div className="mx-auto mt-6 max-w-md rounded-2xl bg-gray-50 p-5 text-left">
-          <DetailRow label="Race category" value={race.name} />
-          <DetailRow label="Entry fee" value={`M${race.fee}`} />
-          <DetailRow
-            label="Payment method"
-            value={PAYMENT_METHODS.find((item) => item.id === method)?.name ?? method}
-          />
-          <DetailRow label="Status" value="Awaiting verification (demo)" />
+
+        <h2 className="mt-2 text-2xl font-black">Payment details submitted!</h2>
+
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-gray-600">
+          Thank you, {submission.fullName}. Your registration details have been saved. Please keep
+          your registration reference for future enquiries.
+        </p>
+
+        <div className="mx-auto mt-6 max-w-lg rounded-2xl bg-gray-50 p-5 text-left">
+          <h3 className="mb-2 text-base font-extrabold">Your registration summary</h3>
+
+          <DetailRow label="Full name" value={submission.fullName} />
+          <DetailRow label="Race category" value={submittedRace.name} />
+          <DetailRow label="Entry fee" value={`M${submission.entryFee}`} />
+          <DetailRow label="Payment method" value={submittedMethod} />
+
+          {submission.paymentReference && (
+            <DetailRow label="Transaction reference" value={submission.paymentReference} />
+          )}
+
+          <DetailRow label="Payment status" value="Pending verification" />
+          <DetailRow label="Registration status" value="Pending approval" />
+          <DetailRow label="Race number" value={submission.raceNumber ?? 'Not assigned yet'} />
         </div>
-        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-          <button
-            onClick={() => router.push('/registration-success')}
-            className="h-[44px] w-[120px] rounded-xl border bg-[#111111] text-white hover:bg-[#25d366]"
-          >
-            Continue
-          </button>
-          <button
-            onClick={() => setSubmitted(false)}
-            className="h-[44px] w-[250px] rounded-xl border bg-[#25d366] text-white hover:bg-[#111111]"
-          >
-            Back to instructions
-          </button>
+
+        <div className="mx-auto mt-5 flex max-w-lg items-start gap-3 rounded-2xl bg-amber-50 p-4 text-left text-amber-900">
+          <CircleAlert size={20} className="mt-0.5 shrink-0" />
+          <p className="text-xs leading-5">
+            Keep your payment confirmation or cash receipt. Your entry is not approved until the
+            organiser verifies the payment and approves your registration.
+          </p>
         </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            fireConfetti();
+
+            router.push(`/registration-success?registration=${encodeURIComponent(submission.id)}`);
+          }}
+          className="mt-6 w-full rounded-xl bg-[#111111] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#25D366] sm:w-auto"
+        >
+          Finish registration
+        </button>
       </div>
     );
   }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+      {/* Selected race summary */}
       <aside className="h-fit rounded-3xl border border-gray-200 bg-white p-5 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
           Your selected race
         </p>
+
         <h2 className="mt-3 text-xl font-black">{race.name}</h2>
+
         <p className="mt-1 text-sm text-gray-500">{race.distance} distance</p>
+
         <div className="mt-5 rounded-2xl bg-[#111111] p-5 text-white">
           <p className="text-sm text-gray-300">Entry fee</p>
           <p className="mt-1 text-3xl font-black text-[#25D366]">M{race.fee}</p>
         </div>
+
         <div className="mt-5 flex items-start gap-3 rounded-2xl bg-amber-50 p-4 text-amber-900">
           <CircleAlert size={20} className="mt-0.5 shrink-0" />
           <p className="text-xs leading-5">
-            Use only the official payment details supplied by the organisers. The placeholders on
-            this page must be replaced before launch.
+            Use only the official payment details supplied by the organisers. Your entry is subject
+            to payment verification and organiser approval.
           </p>
         </div>
       </aside>
 
+      {/* Payment instructions and submission form */}
       <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm sm:p-7">
         <h2 className="text-lg font-black">Select payment method</h2>
+
+        <p className="mt-1 text-sm text-gray-500">
+          Choose how you intend to pay and follow the instructions below.
+        </p>
+
         <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
           {PAYMENT_METHODS.map((item) => {
-            const Icon = methodIcons[item.id];
+            const Icon = methodIcons[item.id as keyof typeof methodIcons];
             const active = method === item.id;
+
             return (
               <button
                 key={item.id}
@@ -122,9 +218,13 @@ export default function PaymentsClient() {
                   setReference('');
                 }}
                 aria-pressed={active}
-                className={`flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border p-3 text-center transition ${active ? 'border-[#25D366] bg-green-50 text-green-900 ring-2 ring-green-100' : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'}`}
+                className={`flex min-h-24 flex-col items-center justify-center gap-2 rounded-2xl border p-3 text-center transition ${
+                  active
+                    ? 'border-[#25D366] bg-green-50 text-green-900 ring-2 ring-green-100'
+                    : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                }`}
               >
-                <Icon size={22} />
+                {Icon && <Icon size={22} />}
                 <span className="text-xs font-bold">{item.name}</span>
               </button>
             );
@@ -132,9 +232,7 @@ export default function PaymentsClient() {
         </div>
 
         <div className="mt-6 rounded-2xl bg-green-50/70 p-5 sm:p-6">
-          <h3 className="text-lg font-extrabold">
-            {PAYMENT_METHODS.find((item) => item.id === method)?.name} instructions
-          </h3>
+          <h3 className="text-lg font-extrabold">{selectedMethodName} instructions</h3>
 
           {method === 'mpesa' && (
             <>
@@ -142,6 +240,7 @@ export default function PaymentsClient() {
               <DetailRow label="Till / reference" value={PAYMENT_DETAILS.mpesa.tillOrReference} />
             </>
           )}
+
           {method === 'bank-transfer' && (
             <>
               <DetailRow label="Bank" value={PAYMENT_DETAILS.bankTransfer.bankName} />
@@ -154,6 +253,7 @@ export default function PaymentsClient() {
               <DetailRow label="Reference" value={PAYMENT_DETAILS.bankTransfer.reference} />
             </>
           )}
+
           {method === 'cash' && (
             <div className="py-3">
               <p className="text-sm font-semibold">Approved payment locations</p>
@@ -166,13 +266,14 @@ export default function PaymentsClient() {
           )}
 
           <h4 className="mt-5 font-bold">Steps to follow</h4>
+
           <ol className="mt-3 space-y-3">
             {instructions.steps.map((step, index) => (
               <li key={step} className="flex gap-3 text-sm leading-6 text-gray-700">
                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-xs font-black text-[#111111]">
                   {index + 1}
                 </span>
-                {step}
+                <span>{step}</span>
               </li>
             ))}
           </ol>
@@ -182,29 +283,55 @@ export default function PaymentsClient() {
           {method !== 'cash' && (
             <div>
               <label htmlFor="payment-reference" className="mb-2 block text-sm font-semibold">
-                Transaction reference
+                Transaction reference *
               </label>
+
               <input
                 id="payment-reference"
                 value={reference}
                 onChange={(event) => setReference(event.target.value)}
                 required
+                maxLength={100}
+                autoComplete="off"
                 placeholder="Enter the reference from your confirmation"
                 className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm outline-none focus:border-[#25D366] focus:ring-4 focus:ring-green-100"
               />
+
               <p className="mt-2 text-xs leading-5 text-gray-500">
-                Demo only: this reference stays in this page state and is not uploaded.
+                Enter the reference shown on your transaction confirmation. The organiser will
+                verify the payment separately.
               </p>
             </div>
           )}
+
+          {method === 'cash' && (
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
+              <p className="text-sm font-semibold text-[#111111]">Paying with cash?</p>
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Follow the approved cash payment instructions. Your registration will remain pending
+                until the organiser confirms receipt of your payment.
+              </p>
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#111111]"
+            disabled={isSubmitting || !registrationId}
+            className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-[#111111] transition hover:bg-[#111111] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
-            I&apos;ve followed these instructions
+            {isSubmitting ? 'Submitting payment details...' : 'Submit payment details'}
           </button>
+
+          {!registrationId && (
+            <p className="text-center text-xs leading-5 text-red-600">
+              Your registration ID is missing. Please complete the registration form before
+              continuing.
+            </p>
+          )}
+
           <p className="text-center text-xs leading-5 text-gray-500">
-            Your entry is not confirmed until the organiser verifies your payment.
+            Your registration is not approved until the organiser verifies your payment. A race
+            number will be assigned after approval.
           </p>
         </form>
       </div>

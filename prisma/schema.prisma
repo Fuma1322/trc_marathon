@@ -10,18 +10,25 @@ datasource db {
 }
 
 model RunnerRegistration {
-  id            String  @id @default(auto()) @map("_id") @db.ObjectId
-  fullName      String
-  email         String
-  phone         String
-  gender        String
-  raceCategory  String
-  entryFee      Int
-  paymentStatus String   @default("PENDING")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+    id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullName           String
+  email              String
+  phone              String
+  gender             String
+  raceCategory       String
+  entryFee           Int
+
+  paymentMethod      String?
+  paymentReference   String?
+  paymentStatus      String   @default("PENDING")
+  registrationStatus String   @default("PENDING_APPROVAL")
+  raceNumber         String?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([email])
   @@index([raceCategory])
   @@index([paymentStatus])
+  @@index([registrationStatus])
 }

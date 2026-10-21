@@ -7,9 +7,9 @@ import { CheckCircle2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { createRegistration } from '@/actions/registration';
 import { RegistrationSchema, type RegistrationInput } from '@/types/registration';
 import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
+import { createRegistration } from '@/actions/registration';
 
 export default function RegistrationForm() {
   const router = useRouter();
