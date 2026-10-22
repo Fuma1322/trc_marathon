@@ -6,7 +6,6 @@ import {
   ClipboardList,
   CreditCard,
   LayoutDashboard,
-  Settings,
   Users,
   Footprints,
   LogOut,
@@ -14,10 +13,9 @@ import {
 
 const items = [
   { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Registrations', href: '/registrations', icon: ClipboardList },
-  { label: 'Runners', href: '/runners', icon: Users },
-  { label: 'Payments', href: '/admin/payments', icon: CreditCard },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { label: 'Registrations', href: '/dashboard/registrations', icon: ClipboardList },
+  { label: 'Runners', href: '/dashboard/runners', icon: Users },
+  { label: 'Payments', href: '/dashboard/payments', icon: CreditCard },
 ];
 
 export default function Sidebar() {

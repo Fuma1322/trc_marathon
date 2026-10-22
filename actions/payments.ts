@@ -1,31 +1,49 @@
 'use server';
 
+import type { PaymentMethodId } from '@/lib/constants';
 import prisma from '@/lib/db';
 
 type PaymentMethod = 'mpesa' | 'bank-transfer' | 'cash';
 
 type SubmitPaymentInput = {
   registrationId: string;
-  method: PaymentMethod;
+  method: PaymentMethodId;
   reference?: string;
 };
 
+const ALLOWED_METHODS: PaymentMethod[] = ['mpesa', 'bank-transfer', 'cash'];
+
 export async function submitRegistrationPayment(input: SubmitPaymentInput) {
   try {
-    const registrationId = input.registrationId?.trim();
-    const reference = input.reference?.trim() ?? '';
+    // Validate and normalize the registration ID.
+    const registrationId =
+      typeof input?.registrationId === 'string' ? input.registrationId.trim() : '';
 
-    const allowedMethods: PaymentMethod[] = ['mpesa', 'bank-transfer', 'cash'];
-
-    if (!registrationId || !allowedMethods.includes(input.method)) {
+    if (!registrationId) {
       return {
         data: null,
         status: 400,
-        error: 'Invalid registration or payment method.',
+        error: 'Your registration reference is missing.',
       };
     }
 
-    if (input.method !== 'cash' && !reference) {
+    // Validate the payment method.
+    const method = input?.method;
+
+    if (typeof method !== 'string' || !ALLOWED_METHODS.includes(method as PaymentMethod)) {
+      return {
+        data: null,
+        status: 400,
+        error: 'Please select a valid payment method.',
+      };
+    }
+
+    // Normalize the transaction reference.
+    const reference = typeof input?.reference === 'string' ? input.reference.trim() : '';
+
+    // M-Pesa and bank transfers require a transaction reference.
+    // Cash payments do not require a reference.
+    if (method !== 'cash' && !reference) {
       return {
         data: null,
         status: 400,
@@ -33,6 +51,16 @@ export async function submitRegistrationPayment(input: SubmitPaymentInput) {
       };
     }
 
+    // Prevent excessively long references.
+    if (reference.length > 100) {
+      return {
+        data: null,
+        status: 400,
+        error: 'The payment reference must not exceed 100 characters.',
+      };
+    }
+
+    // Find the registration.
     const registration = await prisma.runnerRegistration.findUnique({
       where: { id: registrationId },
     });
@@ -45,7 +73,8 @@ export async function submitRegistrationPayment(input: SubmitPaymentInput) {
       };
     }
 
-    if (registration.paymentMethod) {
+    // Prevent payment details from being submitted more than once.
+    if (registration.paymentMethod !== null || registration.paymentReference !== null) {
       return {
         data: null,
         status: 409,
@@ -53,29 +82,47 @@ export async function submitRegistrationPayment(input: SubmitPaymentInput) {
       };
     }
 
-    const updated = await prisma.runnerRegistration.update({
+    // Only registrations awaiting payment submission are eligible.
+    if (
+      registration.paymentStatus !== 'PENDING' ||
+      registration.registrationStatus !== 'PENDING_APPROVAL'
+    ) {
+      return {
+        data: null,
+        status: 409,
+        error: 'This registration is not eligible for payment submission.',
+      };
+    }
+
+    // Save the payment details.
+    const saved = await prisma.runnerRegistration.update({
       where: { id: registrationId },
       data: {
-        paymentMethod: input.method,
-        paymentReference: input.method === 'cash' ? null : reference,
+        paymentMethod: method,
+
+        // Cash payments do not have a transaction reference.
+        paymentReference: method === 'cash' ? null : reference,
+
+        // Payment remains pending until an organiser verifies it.
         paymentStatus: 'PENDING',
         registrationStatus: 'PENDING_APPROVAL',
       },
     });
 
+    // Return the updated registration.
     return {
       data: {
-        id: updated.id,
-        fullName: updated.fullName,
-        email: updated.email,
-        phone: updated.phone,
-        raceCategory: updated.raceCategory,
-        entryFee: updated.entryFee,
-        paymentMethod: updated.paymentMethod,
-        paymentReference: updated.paymentReference,
-        paymentStatus: updated.paymentStatus,
-        registrationStatus: updated.registrationStatus,
-        raceNumber: updated.raceNumber,
+        id: saved.id,
+        fullName: saved.fullName,
+        email: saved.email,
+        phone: saved.phone,
+        raceCategory: saved.raceCategory,
+        entryFee: saved.entryFee,
+        paymentMethod: saved.paymentMethod,
+        paymentReference: saved.paymentReference,
+        paymentStatus: saved.paymentStatus,
+        registrationStatus: saved.registrationStatus,
+        raceNumber: saved.raceNumber,
       },
       status: 200,
       error: null,

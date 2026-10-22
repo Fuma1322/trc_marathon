@@ -58,8 +58,6 @@ export default function RegistrationForm() {
         return;
       }
 
-      toast.success('Registration saved successfully!');
-
       const params = new URLSearchParams({
         race: response.data.raceCategory,
         registration: response.data.id,

@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { CheckCircle2, ClipboardCheck, Home } from 'lucide-react';
-
 import prisma from '@/lib/db';
-import { RACE_CATEGORIES, PAYMENT_METHODS } from '@/lib/constants';
+import { notFound } from 'next/navigation';
 import { fireConfetti } from '@/components/ui/confetti-demo';
+import { CheckCircle2, ClipboardCheck, Home } from 'lucide-react';
+import { RACE_CATEGORIES, PAYMENT_METHODS } from '@/lib/constants';
 
 type Props = {
   searchParams: {

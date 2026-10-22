@@ -1,68 +1,95 @@
 'use client';
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { LockKeyhole } from 'lucide-react';
-import Input from '@/components/ui/Input';
+import { FormEvent, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { loginOrganizer } from '@/actions/organizer-login';
 
-// This is a UI demonstration only; authentication is not implemented.
-export default function LoginPage() {
-  const [message, setMessage] = useState('');
+export default function OrganizerLoginPage() {
+  const router = useRouter();
+  const [error, setError] = useState('');
+  const [isPending, startTransition] = useTransition();
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage('Login is not connected yet. Add secure authentication before using real accounts.');
+    setError('');
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get('email') ?? '');
+    const password = String(formData.get('password') ?? '');
+
+    startTransition(async () => {
+      const result = await loginOrganizer({ email, password });
+
+      if (!result.success) {
+        setError(result.error ?? 'Sign-in failed.');
+        return;
+      }
+
+      router.replace('/dashboard');
+      router.refresh();
+    });
   }
 
   return (
-    <section className="bg-gray-50 px-4 py-16 sm:px-6">
-      <div className="mx-auto max-w-md rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-green-800">
-          <LockKeyhole size={26} />
+    <main className="flex min-h-screen items-center justify-center bg-white px-4 py-10 text-[#111111]">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+        <div className="mb-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#25D366] text-2xl font-black text-[#111111]">
+            T
+          </div>
+
+          <h1 className="text-2xl font-bold">TRC Race</h1>
+          <p className="mt-2 text-sm text-gray-500">Organiser dashboard access</p>
         </div>
-        <h1 className="mt-5 text-center text-2xl font-black">Welcome back</h1>
-        <p className="mt-2 text-center text-sm text-gray-500">
-          Sign in to access your runner account.
-        </p>
-        <form onSubmit={handleSubmit} className="mt-7 space-y-5">
-          <Input
-            label="Email address"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="you@example.com"
-            required
-          />
-          <Input
-            label="Password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Enter your password"
-            required
-          />
-          {message && (
-            <p
-              role="status"
-              className="rounded-xl bg-amber-50 p-3 text-sm leading-5 text-amber-900"
-            >
-              {message}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="email" className="mb-2 block text-sm font-medium">
+              Organiser email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="username"
+              required
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20"
+              placeholder="Enter your email"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="mb-2 block text-sm font-medium">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20"
+              placeholder="Enter your password"
+            />
+          </div>
+
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {error}
             </p>
           )}
+
           <button
             type="submit"
-            className="w-full rounded-xl border bg-[#25D366] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#111111]"
+            disabled={isPending}
+            className="w-full rounded-xl bg-[#25D366] px-4 py-3 font-semibold text-[#111111] transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Sign in
+            {isPending ? 'Signing in...' : 'Sign in securely'}
           </button>
         </form>
-        <p className="mt-6 text-center text-sm text-gray-500">
-          New to TRC Race?{' '}
-          <Link href="/register" className="font-bold text-green-800 hover:underline">
-            Register here
-          </Link>
-        </p>
+
+        <p className="mt-6 text-center text-xs text-gray-500">Authorised organisers only.</p>
       </div>
-    </section>
+    </main>
   );
 }
