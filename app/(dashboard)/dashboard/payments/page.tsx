@@ -1,141 +1,82 @@
-'use client';
+import { redirect } from 'next/navigation';
+import prisma from '@/lib/db';
+import { requireOrganizer } from '@/lib/organizer-auth';
+import PaymentReviewTable from '@/components/payments/PaymentReviewTable';
 
-import { useState } from 'react';
-import { Check, X } from 'lucide-react';
-import Badge from '@/components/ui/Badge';
+export const dynamic = 'force-dynamic';
 
-type Status = 'Pending' | 'Verified' | 'Rejected';
-const initialPayments = [
-  {
-    id: 'TRC-DEMO-001',
-    runner: 'Demo Runner 01',
-    method: 'M-Pesa',
-    amount: 'M280',
-    reference: 'DEMO12345',
-    status: 'Pending' as Status,
-  },
-  {
-    id: 'TRC-DEMO-002',
-    runner: 'Demo Runner 02',
-    method: 'Bank Transfer',
-    amount: 'M220',
-    reference: 'DEMO-BANK-22',
-    status: 'Pending' as Status,
-  },
-  {
-    id: 'TRC-DEMO-003',
-    runner: 'Demo Runner 03',
-    method: 'Cash',
-    amount: 'M140',
-    reference: 'Receipt pending',
-    status: 'Verified' as Status,
-  },
-  {
-    id: 'TRC-DEMO-004',
-    runner: 'Demo Runner 04',
-    method: 'E-Wallet',
-    amount: 'M90',
-    reference: 'DEMO-WALLET-90',
-    status: 'Rejected' as Status,
-  },
-];
-
-export default function AdminPaymentsPage() {
-  const [payments, setPayments] = useState(initialPayments);
-  const [filter, setFilter] = useState<'All' | Status>('All');
-
-  function updateStatus(id: string, status: Status) {
-    // Demo only: state changes in this browser session and are not saved.
-    setPayments((current) =>
-      current.map((payment) => (payment.id === id ? { ...payment, status } : payment))
-    );
+export default async function AdminPaymentsPage() {
+  try {
+    await requireOrganizer();
+  } catch {
+    redirect('/login');
   }
 
-  const visible = payments.filter((payment) => filter === 'All' || payment.status === filter);
+  const registrations = await prisma.runnerRegistration.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      fullName: true,
+      email: true,
+      raceCategory: true,
+      entryFee: true,
+      paymentMethod: true,
+      paymentReference: true,
+      paymentStatus: true,
+      registrationStatus: true,
+      createdAt: true,
+    },
+  });
+
+  // Include cash payments even though they have no transaction reference.
+  // Exclude registrations where the runner has not submitted payment details.
+  const payments = registrations
+    .filter((registration) => registration.paymentMethod !== null)
+    .map((registration) => ({
+      ...registration,
+      createdAt: registration.createdAt,
+    }));
+
+  const pendingCount = payments.filter((payment) => payment.paymentStatus === 'PENDING').length;
+
+  const verifiedCount = payments.filter((payment) => payment.paymentStatus === 'VERIFIED').length;
+
+  const rejectedCount = payments.filter((payment) => payment.paymentStatus === 'REJECTED').length;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-black tracking-tight">Payment verification</h1>
         <p className="mt-2 text-sm text-gray-500">
-          Review references and update demo statuses. Verify real transactions with the provider or
-          bank before confirming payment.
+          Review submitted payment details and record verification decisions.
         </p>
       </div>
-      <div className="flex flex-wrap gap-2">
-        {(['All', 'Pending', 'Verified', 'Rejected'] as const).map((item) => (
-          <button
-            key={item}
-            onClick={() => setFilter(item)}
-            className={`rounded-full px-4 py-2 text-sm font-bold ${filter === item ? 'bg-[#111111] text-white' : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}
-          >
-            {item}
-          </button>
-        ))}
+
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border border-amber-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Pending review</p>
+          <p className="mt-2 text-2xl font-black text-amber-700">{pendingCount}</p>
+        </div>
+
+        <div className="rounded-2xl border border-green-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Verified payments</p>
+          <p className="mt-2 text-2xl font-black text-green-700">{verifiedCount}</p>
+        </div>
+
+        <div className="rounded-2xl border border-red-200 bg-white p-5">
+          <p className="text-sm text-gray-500">Rejected payments</p>
+          <p className="mt-2 text-2xl font-black text-red-700">{rejectedCount}</p>
+        </div>
       </div>
-      <div className="overflow-x-auto rounded-2xl border border-gray-200 bg-white">
-        <table className="w-full min-w-[900px] text-left text-sm">
-          <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
-            <tr>
-              <th className="px-5 py-4">Reference</th>
-              <th className="px-5 py-4">Runner</th>
-              <th className="px-5 py-4">Method</th>
-              <th className="px-5 py-4">Amount</th>
-              <th className="px-5 py-4">Status</th>
-              <th className="px-5 py-4">Actions (demo)</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {visible.map((payment) => (
-              <tr key={payment.id}>
-                <td className="px-5 py-4 font-semibold">
-                  {payment.id}
-                  <span className="mt-1 block text-xs font-normal text-gray-500">
-                    {payment.reference}
-                  </span>
-                </td>
-                <td className="px-5 py-4">{payment.runner}</td>
-                <td className="px-5 py-4">{payment.method}</td>
-                <td className="px-5 py-4 font-bold">{payment.amount}</td>
-                <td className="px-5 py-4">
-                  <Badge
-                    tone={
-                      payment.status === 'Verified'
-                        ? 'green'
-                        : payment.status === 'Pending'
-                          ? 'yellow'
-                          : 'red'
-                    }
-                  >
-                    {payment.status}
-                  </Badge>
-                </td>
-                <td className="px-5 py-4">
-                  <div className="flex gap-2">
-                    <button
-                      className="px-3 py-2 text-xs"
-                      disabled={payment.status === 'Verified'}
-                      onClick={() => updateStatus(payment.id, 'Verified')}
-                    >
-                      <Check size={14} /> Verify
-                    </button>
-                    <button
-                      className="px-3 py-2 text-xs"
-                      disabled={payment.status === 'Rejected'}
-                      onClick={() => updateStatus(payment.id, 'Rejected')}
-                    >
-                      <X size={14} /> Reject
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      <PaymentReviewTable payments={payments} />
+
       <p className="text-xs leading-5 text-gray-500">
-        Important: this table uses fictional data. Status changes are temporary and do not verify a
-        real payment or persist to a database.
+        Confirm M-Pesa and bank transfers against the provider or bank records. Verify cash only
+        after receiving it. Recording a decision here does not independently confirm that money was
+        received.
       </p>
     </div>
   );
