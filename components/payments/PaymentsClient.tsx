@@ -1,13 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Banknote, CircleAlert, Landmark, Smartphone } from 'lucide-react';
 import toast from 'react-hot-toast';
-
-import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
 import { PAYMENT_DETAILS } from '@/lib/payment-details';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { submitRegistrationPayment } from '@/actions/payments';
+import { Banknote, CircleAlert, Landmark, Smartphone } from 'lucide-react';
+import { PAYMENT_METHODS, RACE_CATEGORIES, type PaymentMethodId } from '@/lib/constants';
 
 const methodIcons = {
   mpesa: Smartphone,

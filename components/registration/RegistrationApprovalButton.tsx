@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 import { Check, LoaderCircle, X } from 'lucide-react';
 import { approveRunnerRegistration } from '@/actions/registration-approval';
 

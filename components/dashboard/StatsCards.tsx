@@ -1,6 +1,6 @@
 import prisma from '@/lib/db';
-import { Banknote, CheckCircle2, Clock3, Users } from 'lucide-react';
 import StatsAutoRefresh from './StatsAutoRefresh';
+import { Banknote, CheckCircle2, Clock3, Users } from 'lucide-react';
 
 export default async function StatsCards() {
   const [totalRegistrations, verifiedPayments, awaitingReview, verifiedEntries] = await Promise.all(

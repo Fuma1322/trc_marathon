@@ -5,11 +5,10 @@ import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { CheckCircle2 } from 'lucide-react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter, useSearchParams } from 'next/navigation';
-
-import { RegistrationSchema, type RegistrationInput } from '@/types/registration';
-import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
 import { createRegistration } from '@/actions/registration';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
+import { RegistrationSchema, type RegistrationInput } from '@/types/registration';
 
 export default function RegistrationForm() {
   const router = useRouter();

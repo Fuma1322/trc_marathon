@@ -1,8 +1,8 @@
-import StatsCards from '@/components/dashboard/StatsCards';
-import { RACE_CATEGORIES } from '@/lib/constants';
-import { requireOrganizer } from '@/lib/organizer-auth';
 import prisma from '@/lib/db';
 import { redirect } from 'next/navigation';
+import { RACE_CATEGORIES } from '@/lib/constants';
+import { requireOrganizer } from '@/lib/organizer-auth';
+import StatsCards from '@/components/dashboard/StatsCards';
 
 export const dynamic = 'force-dynamic';
 
