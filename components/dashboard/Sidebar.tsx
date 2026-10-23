@@ -9,7 +9,6 @@ import {
   Users,
   Footprints,
   ChevronRight,
-  Flag,
 } from 'lucide-react';
 
 const items = [
