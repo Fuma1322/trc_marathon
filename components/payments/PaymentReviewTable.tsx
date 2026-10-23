@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
-import { Check, X, Pencil, LoaderCircle } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
+import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
+import { Check, X, Pencil, LoaderCircle } from 'lucide-react';
 import { reviewRegistrationPayment } from '@/actions/payment-review';
 
 type PaymentStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
