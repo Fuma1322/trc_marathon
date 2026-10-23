@@ -11,9 +11,15 @@ const raceCategories = [
 export default function Hero() {
   return (
     <section className="relative isolate w-full min-w-0 overflow-hidden bg-slate-950 text-white">
-      {/* Race photography: keep the image visible and vibrant */}
+      {/* Responsive race background */}
       <div
-        className="absolute inset-0 -z-30 bg-[url('/marathon-hero.png')] bg-cover"
+        className="absolute inset-0 -z-30 bg-[url('/marathon-hero.png')] bg-cover bg-[center_35%] sm:bg-center lg:bg-cover"
+        aria-hidden="true"
+      />
+
+      {/* Mobile background */}
+      <div
+        className="absolute inset-0 -z-30 bg-[url('/marathon-hero-mobile.png')] bg-cover bg-center sm:hidden"
         aria-hidden="true"
       />
 
