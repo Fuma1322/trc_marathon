@@ -14,8 +14,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               </p>
               <p className="mt-1 text-sm text-gray-500">Administration workspace</p>
             </div>
-            <span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-800">
-              Frontend preview
+            <span className="rounded-full bg-green-100 px-3 py-1.5 text-xs font-bold text-green-800">
+              System Online
             </span>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import prisma from '@/lib/db';
 import Badge from '@/components/ui/Badge';
+import RegistrationApprovalButton from '../registration/RegistrationApprovalButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -69,17 +70,17 @@ export default async function RegistrationsTable() {
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1150px] text-left text-sm">
+          <table className="w-full min-w-[1250px] text-left text-sm">
             <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
               <tr>
                 <th className="px-5 py-4 font-bold">Runner</th>
                 <th className="px-5 py-4 font-bold">Category</th>
                 <th className="px-5 py-4 font-bold">Entry fee</th>
                 <th className="px-5 py-4 font-bold">Payment method</th>
-                <th className="px-5 py-4 font-bold">Reference</th>
                 <th className="px-5 py-4 font-bold">Payment status</th>
                 <th className="px-5 py-4 font-bold">Registration status</th>
                 <th className="px-5 py-4 font-bold">Race number</th>
+                <th className="px-5 py-4 font-bold">Actions</th>
                 <th className="px-5 py-4 font-bold">Date</th>
               </tr>
             </thead>
@@ -107,10 +108,6 @@ export default async function RegistrationsTable() {
                       : 'Not submitted'}
                   </td>
 
-                  <td className="px-5 py-4 text-gray-600">
-                    {runner.paymentReference || 'Not provided'}
-                  </td>
-
                   <td className="whitespace-nowrap px-5 py-4">
                     <Badge tone={paymentTone(runner.paymentStatus)}>
                       {formatStatus(runner.paymentStatus)}
@@ -131,6 +128,16 @@ export default async function RegistrationsTable() {
                     ) : (
                       <span className="text-gray-400">Not assigned</span>
                     )}
+                  </td>
+
+                  <td className="px-5 py-4">
+                    <RegistrationApprovalButton
+                      registrationId={runner.id}
+                      runnerName={runner.fullName}
+                      paymentStatus={runner.paymentStatus}
+                      registrationStatus={runner.registrationStatus}
+                      raceNumber={runner.raceNumber}
+                    />
                   </td>
 
                   <td className="whitespace-nowrap px-5 py-4 text-gray-500">

@@ -1,5 +1,4 @@
 import StatsCards from '@/components/dashboard/StatsCards';
-import RegistrationsTable from '@/components/dashboard/RegistrationsTable';
 import { RACE_CATEGORIES } from '@/lib/constants';
 import { requireOrganizer } from '@/lib/organizer-auth';
 import prisma from '@/lib/db';
@@ -89,8 +88,6 @@ export default async function DashboardPage() {
           })}
         </div>
       </section>
-
-      <RegistrationsTable />
     </div>
   );
 }

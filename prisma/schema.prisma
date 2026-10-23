@@ -32,3 +32,9 @@ model RunnerRegistration {
   @@index([paymentStatus])
   @@index([registrationStatus])
 }
+
+model RaceNumberCounter {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  raceCategory String @unique
+  lastNumber   Int    @default(0)
+}

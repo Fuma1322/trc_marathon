@@ -13,9 +13,9 @@ import {
 
 const items = [
   { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
+  { label: 'Payments', href: '/dashboard/payments', icon: CreditCard },
   { label: 'Registrations', href: '/dashboard/registrations', icon: ClipboardList },
   { label: 'Runners', href: '/dashboard/runners', icon: Users },
-  { label: 'Payments', href: '/dashboard/payments', icon: CreditCard },
 ];
 
 export default function Sidebar() {
