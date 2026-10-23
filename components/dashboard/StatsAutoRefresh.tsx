@@ -9,7 +9,7 @@ export default function StatsAutoRefresh() {
   useEffect(() => {
     const interval = window.setInterval(() => {
       router.refresh();
-    }, 30_000);
+    }, 5_000); // Refresh every 5 seconds
 
     return () => window.clearInterval(interval);
   }, [router]);
