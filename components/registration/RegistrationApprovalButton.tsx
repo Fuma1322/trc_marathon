@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { resendRaceTicketEmail } from '@/actions/ticket-email';
 import { Check, LoaderCircle, Mail, MessageCircle, RefreshCw, X } from 'lucide-react';
 import { approveRunnerRegistration } from '@/actions/registration-approval';
 
@@ -83,30 +82,6 @@ export default function RegistrationApprovalButton({
     });
   }
 
-  function handleResendTicket() {
-    setNotice('');
-    setError('');
-
-    startResendTransition(async () => {
-      try {
-        const result = await resendRaceTicketEmail(registrationId);
-
-        if (!result.success) {
-          setNotice(result.error ?? 'Unable to resend ticket email.');
-          setNoticeType('warning');
-          return;
-        }
-
-        setNotice(result.message ?? 'Ticket email sent successfully.');
-        setNoticeType('success');
-        router.refresh();
-      } catch {
-        setNotice('Unable to resend ticket email. Please try again.');
-        setNoticeType('warning');
-      }
-    });
-  }
-
   function handleWhatsAppTicket() {
     setNotice('');
     setError('');
@@ -181,21 +156,6 @@ export default function RegistrationApprovalButton({
 
           <span className="text-xs font-bold text-slate-700">{raceNumber}</span>
         </div>
-
-        <button
-          type="button"
-          disabled={isResending}
-          onClick={handleResendTicket}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-green-200 bg-white px-3 py-2 text-xs font-bold text-green-800 transition hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isResending ? (
-            <LoaderCircle size={14} className="animate-spin" />
-          ) : (
-            <RefreshCw size={14} />
-          )}
-
-          {isResending ? 'Sending ticket...' : 'Resend ticket email'}
-        </button>
 
         <button
           type="button"
