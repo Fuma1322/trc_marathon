@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <Activity size={19} className="hidden shrink-0 text-green-600 sm:block" />
             </div>
 
-            {children}
+            <main className="min-w-0 flex-1 pb-24 lg:pb-6">{children}</main>
           </div>
         </div>
       </main>
