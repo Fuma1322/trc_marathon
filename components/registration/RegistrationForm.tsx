@@ -120,7 +120,7 @@ export default function RegistrationForm() {
 
         <div>
           <label htmlFor="phone" className="mb-2 block text-sm font-semibold">
-            Phone number *
+            WhatsApp Number *
           </label>
           <input
             id="phone"
