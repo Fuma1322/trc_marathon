@@ -45,7 +45,6 @@ export default function RegistrationApprovalButton({
   const [noticeType, setNoticeType] = useState<'success' | 'warning'>('success');
   const [assignedNumber, setAssignedNumber] = useState('');
   const [isPending, startTransition] = useTransition();
-  const [isResending, startResendTransition] = useTransition();
 
   const isApproved = registrationStatus === 'APPROVED' && Boolean(raceNumber);
 
