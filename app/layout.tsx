@@ -1,9 +1,9 @@
 import './globals.css';
+import { Toaster } from 'sonner';
 import { cn } from '@/lib/utils';
 import type { Metadata, Viewport } from 'next';
-import { Poppins, Inter } from 'next/font/google';
-import { Toaster } from 'sonner';
 import { ToastProvider } from './ToastProvider';
+import { Poppins, Inter } from 'next/font/google';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,41 +19,36 @@ const poppins = Poppins({
 });
 
 const siteUrl = 'https://trc-marathon.vercel.app';
+const ogImage = `${siteUrl}/trc-race-2026.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: 'TRC Race 2026 | Register Now',
-    template: '%s | TRC × LSRC Race 2026',
+    default: 'TRC Race 2026 | One Heat. One Run. One Lesotho.',
+    template: '%s | TRC Race 2026',
   },
 
   description:
-    'Register for the TRC × LSRC Race 2026 in Maseru, Lesotho, on 14 November 2026. Walk, jog or run as we celebrate 60 years of Lesotho’s independence under the theme “Beating El Niño for Independence.” Everyone is welcome.',
+    'Register for TRC Race 2026 in Maseru, Lesotho, on 14 November 2026. Walk, jog or run as we celebrate 60 years of Lesotho’s independence under the theme “Beating El Niño for Independence.” Everyone is welcome.',
 
   applicationName: 'TRC Race 2026',
 
   keywords: [
     'TRC Race 2026',
-    'TRC LSRC Race',
     'Lesotho marathon 2026',
     'Maseru running event',
     'Lesotho 60 years independence',
     'Beating El Niño for Independence',
     'Transformation Resource Centre',
-    'Lesotho Sport and Recreation Commission',
     'Lesotho road race',
     'marathon registration Lesotho',
     'running events in Maseru',
   ],
 
-  authors: [
-    { name: 'Transformation Resource Centre' },
-    { name: 'Lesotho Sport and Recreation Commission' },
-  ],
-
-  creator: 'Transformation Resource Centre × Lesotho Sport and Recreation Commission',
-
+  authors: [{ name: 'Transformation Resource Centre' }],
+  creator: 'Transformation Resource Centre',
+  publisher: 'Transformation Resource Centre',
   category: 'Sports & Recreation',
 
   alternates: {
@@ -63,26 +58,32 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     url: siteUrl,
-    siteName: 'TRC × LSRC Race 2026',
+    siteName: 'TRC Race 2026',
     locale: 'en_LS',
-    title: 'TRC × LSRC Race 2026 — One Heat. One Run. One Lesotho.',
+    title: 'TRC Race 2026 | One Heat. One Run. One Lesotho.',
     description:
-      'Join us on 14 November 2026 at the TRC Compound, Maseru, as we celebrate 60 years of Lesotho’s independence. Walk, jog or run under the theme “Beating El Niño for Independence.” Everyone is welcome.',
+      'Join us on 14 November 2026 at the TRC Compound, Maseru, Lesotho. Celebrate 60 years of independence through health, unity and community under the theme “Beating El Niño for Independence.” Everyone is welcome.',
     images: [
       {
-        url: '/trc-race-2026.png',
+        url: ogImage,
+        secureUrl: ogImage,
         width: 1711,
         height: 959,
-        alt: 'TRC × LSRC Race 2026 — One Heat. One Run. One Lesotho.',
+        type: 'image/png',
+        alt: 'TRC Race 2026 — One Heat. One Run. One Lesotho.',
       },
     ],
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: 'TRC × LSRC Race 2026 | One Heat. One Run. One Lesotho.',
+    title: 'TRC Race 2026 | One Heat. One Run. One Lesotho.',
     description:
-      'Register for the TRC × LSRC Race 2026 on 14 November in Maseru, Lesotho. Celebrate 60 years of independence through health, unity and community.',
+      'Register for TRC Race 2026 on 14 November 2026 in Maseru, Lesotho. Celebrate 60 years of independence through health, unity and community.',
+    images: {
+      url: ogImage,
+      alt: 'TRC Race 2026 — One Heat. One Run. One Lesotho.',
+    },
   },
 
   robots: {
