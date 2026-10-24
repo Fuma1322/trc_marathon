@@ -9,7 +9,6 @@ import {
   Users,
   Footprints,
   ChevronRight,
-  Ticket,
 } from 'lucide-react';
 import LogoutButton from './LogoutButton';
 
@@ -37,12 +36,6 @@ const items = [
     href: '/dashboard/runners',
     icon: Users,
     description: 'Runner directory',
-  },
-  {
-    label: 'Tickets',
-    href: '/dashboard/ticket',
-    icon: Ticket,
-    description: 'Ticket management',
   },
 ];
 
