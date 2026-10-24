@@ -10,7 +10,6 @@ import {
   Footprints,
   ChevronRight,
   Ticket,
-  LogOut,
 } from 'lucide-react';
 import LogoutButton from './LogoutButton';
 
