@@ -103,3 +103,66 @@
     @apply font-sans;
   }
 }
+
+/* Preserve ticket colors when printing or saving as PDF */
+.ticket-print,
+.ticket-print * {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+.ticket-print-color {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .ticket-page {
+    min-height: 0 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  .ticket-page-container {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .ticket-print {
+    width: 100% !important;
+    overflow: hidden !important;
+    border: 2px solid #111111 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .ticket-print header {
+    background-color: #111111 !important;
+    color: #ffffff !important;
+  }
+
+  .ticket-print-color {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
