@@ -1,6 +1,6 @@
-import PrintTicketButton from '@/components/dashboard/PrintTicketButton';
 import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
+import PrintTicketButton from '@/components/dashboard/PrintTicketButton';
 
 export const dynamic = 'force-dynamic';
 

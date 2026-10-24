@@ -126,21 +126,9 @@ export default function Sidebar() {
 
       {/* Footer branding — no demo sign-out */}
       <div className="hidden shrink-0 border-t border-slate-100 p-4 lg:block">
-        <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white shadow-sm">
-            <Footprints size={18} className="text-green-600" />
-          </span>
-
-          <div className="min-w-0">
-            <p className="text-xs font-bold text-slate-800">TRC × LSRC</p>
-            <p className="mt-1 truncate text-[10px] text-slate-500">Race management portal</p>
-            <LogoutButton />
-          </div>
-
-          <span
-            className="ml-auto h-2 w-2 shrink-0 rounded-full bg-[#25D366]"
-            title="System online"
-          />
+        {/* Logout action */}
+        <div className="flex items-center justify-center rounded-2xl border border-red-100 bg-red-600/70 p-1.5 transition-colors hover:bg-red-50">
+          <LogoutButton />
         </div>
       </div>
     </aside>
