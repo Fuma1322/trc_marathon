@@ -67,9 +67,9 @@ export default async function RegistrationSuccessPage({ searchParams }: Props) {
         <div className="mt-6 flex items-start gap-3 rounded-2xl bg-green-50 p-4 text-left">
           <ClipboardCheck className="mt-0.5 shrink-0 text-green-700" size={21} />
           <p className="text-sm leading-6 text-gray-700">
-            Keep your payment confirmation or cash receipt. Your race entry is not approved until
-            the organiser completes the required checks. Your race number will be displayed when it
-            is assigned.
+            Keep your payment confirmation. Your race entry is not approved until the organiser
+            completes the required checks. Please be aware that your ticket will be send via
+            WhatsApp once your registration is approved.
           </p>
         </div>
         <Link href="/">
