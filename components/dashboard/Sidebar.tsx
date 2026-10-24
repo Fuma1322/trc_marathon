@@ -132,7 +132,7 @@ export default function Sidebar() {
         aria-label="Mobile admin navigation"
         className="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200/80 bg-white/95 px-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:hidden"
       >
-        <div className="mx-auto grid max-w-lg grid-cols-5 gap-1">
+        <div className="mx-auto grid max-w-lg grid-cols-4 gap-1">
           {items.map(({ label, href, icon: Icon }) => {
             const active = isActive(href);
 
