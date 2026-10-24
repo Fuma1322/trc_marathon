@@ -238,8 +238,8 @@ export default function RegistrationApprovalButton({
                 <div>
                   <p className="text-sm font-bold text-green-900">Digital race ticket</p>
                   <p className="mt-1 text-xs leading-relaxed text-green-800">
-                    The system will generate a unique ticket and attempt to email it to the racer's
-                    registered email address after approval.
+                    The system will generate a unique ticket and attempt to email it to the
+                    racer&apos;s registered email address after approval.
                   </p>
                 </div>
               </div>
