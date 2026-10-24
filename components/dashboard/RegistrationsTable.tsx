@@ -137,6 +137,9 @@ export default async function RegistrationsTable() {
                       paymentStatus={runner.paymentStatus}
                       registrationStatus={runner.registrationStatus}
                       raceNumber={runner.raceNumber}
+                      runnerPhone={runner.phone}
+                      raceCategory={runner.raceCategory}
+                      ticketId={runner.ticketId}
                     />
                   </td>
 

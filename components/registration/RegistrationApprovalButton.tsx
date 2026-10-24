@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { resendRaceTicketEmail } from '@/actions/ticket-email';
-import { Check, LoaderCircle, Mail, RefreshCw, X } from 'lucide-react';
+import { Check, LoaderCircle, Mail, MessageCircle, RefreshCw, X } from 'lucide-react';
 import { approveRunnerRegistration } from '@/actions/registration-approval';
 
 type Props = {
@@ -12,7 +12,21 @@ type Props = {
   paymentStatus: string;
   registrationStatus: string;
   raceNumber: string | null;
+  runnerPhone?: string;
+  raceCategory?: string;
+  ticketId?: string | null;
 };
+
+function normalizeLesothoPhone(phone: string) {
+  const digits = phone.replace(/\D/g, '');
+
+  // Convert local Lesotho numbers such as 59734593 to 26659734593.
+  if (digits.startsWith('266')) return digits;
+  if (digits.startsWith('0')) return `266${digits.slice(1)}`;
+  if (digits.length === 8) return `266${digits}`;
+
+  return digits;
+}
 
 export default function RegistrationApprovalButton({
   registrationId,
@@ -20,6 +34,9 @@ export default function RegistrationApprovalButton({
   paymentStatus,
   registrationStatus,
   raceNumber,
+  runnerPhone,
+  raceCategory,
+  ticketId,
 }: Props) {
   const router = useRouter();
 
@@ -41,25 +58,28 @@ export default function RegistrationApprovalButton({
     setNotice('');
 
     startTransition(async () => {
-      const result = await approveRunnerRegistration(registrationId);
+      try {
+        const result = await approveRunnerRegistration(registrationId);
 
-      if (!result.success) {
-        setError(result.error ?? 'Approval failed.');
-        return;
+        if (!result.success) {
+          setError(result.error ?? 'Approval failed.');
+          return;
+        }
+
+        setAssignedNumber(result.raceNumber ?? '');
+        setOpen(false);
+
+        setNotice(
+          result.emailSent
+            ? 'Registration approved and ticket emailed successfully.'
+            : 'Registration approved. Ticket email could not be sent; you can retry below or use WhatsApp.'
+        );
+
+        setNoticeType(result.emailSent ? 'success' : 'warning');
+        router.refresh();
+      } catch {
+        setError('Unable to approve this registration. Please try again.');
       }
-
-      setAssignedNumber(result.raceNumber ?? '');
-      setOpen(false);
-
-      setNotice(
-        result.emailSent
-          ? 'Registration approved and ticket emailed successfully.'
-          : 'Registration approved. Ticket email could not be sent; you can retry below.'
-      );
-
-      setNoticeType(result.emailSent ? 'success' : 'warning');
-
-      router.refresh();
     });
   }
 
@@ -68,19 +88,77 @@ export default function RegistrationApprovalButton({
     setError('');
 
     startResendTransition(async () => {
-      const result = await resendRaceTicketEmail(registrationId);
+      try {
+        const result = await resendRaceTicketEmail(registrationId);
 
-      if (!result.success) {
-        setNotice(result.error ?? 'Unable to resend ticket email.');
+        if (!result.success) {
+          setNotice(result.error ?? 'Unable to resend ticket email.');
+          setNoticeType('warning');
+          return;
+        }
+
+        setNotice(result.message ?? 'Ticket email sent successfully.');
+        setNoticeType('success');
+        router.refresh();
+      } catch {
+        setNotice('Unable to resend ticket email. Please try again.');
         setNoticeType('warning');
-        return;
       }
-
-      setNotice(result.message ?? 'Ticket email sent successfully.');
-      setNoticeType('success');
-
-      router.refresh();
     });
+  }
+
+  function handleWhatsAppTicket() {
+    setNotice('');
+    setError('');
+
+    if (!runnerPhone?.trim()) {
+      setNotice(
+        'No phone number was provided to this component. Update the registration list to pass the runner’s phone number.'
+      );
+      setNoticeType('warning');
+      return;
+    }
+
+    if (!raceNumber || !ticketId) {
+      setNotice(
+        'The race number or ticket ID is missing. Refresh the registration or check the saved ticket details.'
+      );
+      setNoticeType('warning');
+      return;
+    }
+
+    const phone = normalizeLesothoPhone(runnerPhone);
+
+    if (!phone || phone.length < 10) {
+      setNotice(
+        'The runner’s phone number does not appear valid. Check the saved number, including the country code.'
+      );
+      setNoticeType('warning');
+      return;
+    }
+
+    const ticketUrl = `https://trc-marathon.vercel.app/ticket/${encodeURIComponent(ticketId)}`;
+
+    const message = [
+      `Hello ${runnerName},`,
+      '',
+      'Congratulations! Your registration for TRC × LSRC Race 2026 has been approved.',
+      '',
+      `Race number: ${raceNumber}`,
+      `Race category: ${raceCategory || 'Please check your registration'}`,
+      'Event date: 14 November 2026',
+      'Venue: TRC Compound, Maseru, Lesotho',
+      '',
+      'View your official race ticket:',
+      ticketUrl,
+      '',
+      'One Heat. One Run. One Lesotho.',
+    ].join('\n');
+
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    // Open directly from the click to avoid browser popup blocking.
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
   }
 
   if (registrationStatus === 'REJECTED') {
@@ -108,7 +186,7 @@ export default function RegistrationApprovalButton({
           type="button"
           disabled={isResending}
           onClick={handleResendTicket}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-green-200 bg-white px-3 py-2 text-xs font-bold text-green-800 transition hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-green-200 bg-white px-3 py-2 text-xs font-bold text-green-800 transition hover:bg-green-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isResending ? (
             <LoaderCircle size={14} className="animate-spin" />
@@ -116,7 +194,16 @@ export default function RegistrationApprovalButton({
             <RefreshCw size={14} />
           )}
 
-          {isResending ? 'Sending ticket...' : 'Resend ticket'}
+          {isResending ? 'Sending ticket...' : 'Resend ticket email'}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleWhatsAppTicket}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-3 py-2 text-xs font-bold text-[#111111] transition hover:bg-green-400"
+        >
+          <MessageCircle size={15} />
+          Send Ticket via WhatsApp
         </button>
 
         {notice && (
@@ -238,8 +325,9 @@ export default function RegistrationApprovalButton({
                 <div>
                   <p className="text-sm font-bold text-green-900">Digital race ticket</p>
                   <p className="mt-1 text-xs leading-relaxed text-green-800">
-                    The system will generate a unique ticket and attempt to email it to the
-                    racer&apos;s registered email address after approval.
+                    The system will generate a unique ticket and attempt to email it to the racer
+                    after approval. You can also share the ticket through WhatsApp once approval is
+                    complete.
                   </p>
                 </div>
               </div>
