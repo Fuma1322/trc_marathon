@@ -152,8 +152,6 @@ export default function RegistrationApprovalButton({
             <Check size={13} />
             Approved
           </span>
-
-          <span className="text-xs font-bold text-slate-700">{raceNumber}</span>
         </div>
 
         <button
