@@ -1,6 +1,8 @@
 'use server';
 
 import prisma from '@/lib/db';
+import { randomBytes } from 'crypto';
+import { sendRaceTicketEmail } from '@/lib/ticket-email';
 import { requireOrganizer } from '@/lib/organizer-auth';
 
 function getRaceCategoryCode(raceCategory: string): string | null {
@@ -38,10 +40,13 @@ export async function approveRunnerRegistration(registrationId: string) {
       where: { id },
       select: {
         id: true,
+        fullName: true,
+        email: true,
         raceCategory: true,
         paymentStatus: true,
         registrationStatus: true,
         raceNumber: true,
+        ticketId: true,
       },
     });
 
@@ -83,7 +88,6 @@ export async function approveRunnerRegistration(registrationId: string) {
     }
 
     // Atomically allocate the next number for this category.
-    // Example: category 25, lastNumber 4 -> 25-005.
     const counter = await prisma.raceNumberCounter.upsert({
       where: {
         raceCategory: categoryCode,
@@ -104,8 +108,11 @@ export async function approveRunnerRegistration(registrationId: string) {
 
     const raceNumber = `${categoryCode}-${String(counter.lastNumber).padStart(3, '0')}`;
 
-    // Only approve if the registration is still eligible.
-    // Handle raceNumber being null or absent in MongoDB.
+    // Generate a unique ticket ID for this approval attempt.
+    const ticketId = randomBytes(32).toString('hex');
+
+    // Approve only if payment and registration status remain valid.
+    // Also handle null or missing raceNumber values in MongoDB.
     const updated = await prisma.runnerRegistration.updateMany({
       where: {
         id,
@@ -116,6 +123,7 @@ export async function approveRunnerRegistration(registrationId: string) {
       data: {
         registrationStatus: 'APPROVED',
         raceNumber,
+        ticketId,
       },
     });
 
@@ -129,10 +137,42 @@ export async function approveRunnerRegistration(registrationId: string) {
       };
     }
 
-    return {
-      success: true,
-      raceNumber,
-    };
+    // Approval and ticket creation have succeeded.
+    // Email delivery is deliberately handled separately so an SMTP
+    // failure cannot undo the approval or race-number assignment.
+    try {
+      await sendRaceTicketEmail({
+        fullName: runner.fullName,
+        email: runner.email,
+        raceNumber,
+        raceCategory: runner.raceCategory,
+        ticketId,
+      });
+
+      await prisma.runnerRegistration.update({
+        where: { id },
+        data: {
+          ticketEmailedAt: new Date(),
+        },
+      });
+
+      return {
+        success: true,
+        raceNumber,
+        emailSent: true,
+        message: 'Registration approved, race number assigned, and ticket emailed successfully.',
+      };
+    } catch (emailError) {
+      console.error('Ticket email delivery failed:', { registrationId: id, emailError });
+
+      return {
+        success: true,
+        raceNumber,
+        emailSent: false,
+        message:
+          'Registration approved and ticket generated, but the email could not be sent. Please resend the ticket email.',
+      };
+    }
   } catch (error) {
     console.error('RUNNER APPROVAL ERROR:', error);
 

@@ -24,14 +24,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
 
   title: {
-    default: 'TRC × LSRC Race 2026 | Register Now',
+    default: 'TRC Race 2026 | Register Now',
     template: '%s | TRC × LSRC Race 2026',
   },
 
   description:
     'Register for the TRC × LSRC Race 2026 in Maseru, Lesotho, on 14 November 2026. Walk, jog or run as we celebrate 60 years of Lesotho’s independence under the theme “Beating El Niño for Independence.” Everyone is welcome.',
 
-  applicationName: 'TRC × LSRC Race 2026',
+  applicationName: 'TRC Race 2026',
 
   keywords: [
     'TRC Race 2026',

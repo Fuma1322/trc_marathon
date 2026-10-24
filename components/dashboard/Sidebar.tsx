@@ -9,7 +9,9 @@ import {
   Users,
   Footprints,
   ChevronRight,
+  Ticket,
 } from 'lucide-react';
+import LogoutButton from './LogoutButton';
 
 const items = [
   {
@@ -35,6 +37,12 @@ const items = [
     href: '/dashboard/runners',
     icon: Users,
     description: 'Runner directory',
+  },
+  {
+    label: 'Tickets',
+    href: '/dashboard/ticket',
+    icon: Ticket,
+    description: 'Ticket management',
   },
 ];
 
@@ -126,6 +134,7 @@ export default function Sidebar() {
           <div className="min-w-0">
             <p className="text-xs font-bold text-slate-800">TRC × LSRC</p>
             <p className="mt-1 truncate text-[10px] text-slate-500">Race management portal</p>
+            <LogoutButton />
           </div>
 
           <span
