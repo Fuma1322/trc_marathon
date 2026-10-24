@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { Check, LoaderCircle, Mail, MessageCircle, RefreshCw, X } from 'lucide-react';
+import { Check, LoaderCircle, Mail, MessageCircle, X } from 'lucide-react';
 import { approveRunnerRegistration } from '@/actions/registration-approval';
 
 type Props = {
