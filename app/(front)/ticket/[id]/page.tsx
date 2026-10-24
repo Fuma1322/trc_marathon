@@ -80,7 +80,7 @@ export default async function TicketPage({ params }: TicketPageProps) {
             <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <p className="text-xs font-bold uppercase tracking-widest text-slate-500">
-                  Racer's full name
+                  Racer&apos;s full name
                 </p>
                 <p className="mt-1 break-words text-xl font-bold text-slate-900">
                   {runner.fullName}
