@@ -1,6 +1,6 @@
+import PrintTicketButton from '@/components/dashboard/PrintTicketButton';
 import prisma from '@/lib/db';
 import { notFound } from 'next/navigation';
-import PrintTicketButton from '@/components/dashboard/PrintTicketButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,7 +44,7 @@ export default async function TicketPage({ params }: TicketPageProps) {
             </h1>
           </div>
 
-          <PrintTicketButton />
+          <PrintTicketButton ticketId="2026" />
         </div>
 
         <article className="ticket-print overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl print:rounded-none print:border-2 print:border-black print:shadow-none">
