@@ -121,7 +121,8 @@ export default async function TicketPage({ params }: TicketPageProps) {
 
             <div className="ticket-print-color mt-8 rounded-2xl bg-slate-50 p-5 text-center">
               <p className="text-sm font-extrabold text-slate-900">
-                ONE HEAT. ONE RUN. ONE LESOTHO.
+                Tickets Sponsored By <span className="text-[#25D366]">Maseru</span>
+                <span className="text-[#111111]">Plug</span>
               </p>
 
               <p className="mt-1 text-xs text-slate-500">
