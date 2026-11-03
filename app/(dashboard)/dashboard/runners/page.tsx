@@ -23,6 +23,7 @@ export default async function RunnersPage() {
       phone: true,
       raceCategory: true,
       paymentStatus: true,
+      vestSize: true,
       registrationStatus: true,
       createdAt: true,
     },
@@ -59,6 +60,7 @@ export default async function RunnersPage() {
               <th className="px-5 py-4">Email</th>
               <th className="px-5 py-4">Phone</th>
               <th className="px-5 py-4">Race category</th>
+              <th className="px-5 py-4">Vest size</th>
               <th className="px-5 py-4">Payment</th>
               <th className="px-5 py-4">Registration</th>
               <th className="px-5 py-4">Registered on</th>
@@ -78,6 +80,8 @@ export default async function RunnersPage() {
                   <td className="px-5 py-4 text-gray-600">{runner.phone}</td>
 
                   <td className="px-5 py-4">{race?.name ?? runner.raceCategory}</td>
+
+                  <td className="px-5 py-4">{runner.vestSize || 'Not applicable'}</td>
 
                   <td className="px-5 py-4">
                     <span
