@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createRegistration } from '@/actions/registration';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RACE_CATEGORIES, type RaceCategoryId } from '@/lib/constants';
-import { RegistrationSchema, type RegistrationInput } from '@/types/registration';
+import { RegistrationSchema, type RegistrationInput, VEST_SIZES } from '@/types/registration';
 
 export default function RegistrationForm() {
   const router = useRouter();
@@ -25,6 +25,7 @@ export default function RegistrationForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegistrationInput>({
     resolver: zodResolver(RegistrationSchema),
@@ -34,6 +35,7 @@ export default function RegistrationForm() {
       phone: '',
       gender: 'prefer_not_to_say',
       raceCategory: initialRace,
+      vestSize: '',
       acceptedTerms: false as unknown as true,
     },
   });
@@ -171,7 +173,18 @@ export default function RegistrationForm() {
                 value={race.id}
                 checked={raceId === race.id}
                 {...register('raceCategory', {
-                  onChange: (event) => setRaceId(event.target.value as RaceCategoryId),
+                  onChange: (event) => {
+                    const nextRace = event.target.value as RaceCategoryId;
+
+                    setRaceId(nextRace);
+
+                    if (nextRace !== '10km' && nextRace !== '21km') {
+                      setValue('vestSize', '', {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      });
+                    }
+                  },
                 })}
                 className="sr-only"
               />
@@ -187,6 +200,45 @@ export default function RegistrationForm() {
         </div>
         {errors.raceCategory && (
           <p className="mt-2 text-xs text-red-600">{errors.raceCategory.message}</p>
+        )}
+
+        {/* Vest size — only for 10 km and 21 km */}
+        {(raceId === '10km' || raceId === '21km') && (
+          <div className="mt-6 rounded-2xl border border-green-200 bg-green-50/60 p-5">
+            <div className="mb-4">
+              <h3 className="font-extrabold text-gray-900">
+                Race vest size <span className="text-red-600">*</span>
+              </h3>
+
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Select your vest size. Vests are available for the 10 km and 21 km races only.
+              </p>
+            </div>
+
+            <label htmlFor="vestSize" className="mb-2 block text-sm font-semibold text-gray-800">
+              Choose your size
+            </label>
+
+            <select
+              id="vestSize"
+              {...register('vestSize')}
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-[#25D366] focus:ring-4 focus:ring-green-100"
+            >
+              <option value="">Select vest size</option>
+
+              {VEST_SIZES.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+
+            {errors.vestSize && (
+              <p className="mt-2 text-xs text-red-600">{errors.vestSize.message}</p>
+            )}
+
+            <p className="mt-3 text-xs text-gray-500">Available sizes: XS, S, M, L, XL and 2XL.</p>
+          </div>
         )}
       </div>
 

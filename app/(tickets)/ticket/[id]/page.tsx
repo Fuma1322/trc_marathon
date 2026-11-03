@@ -9,7 +9,7 @@ type TicketPageProps = {
 };
 
 export default async function TicketPage({ params }: TicketPageProps) {
-  const runner = await prisma.runnerRegistration.findUnique({
+  const runner = await prisma.runnerRegistration.findFirst({
     where: { ticketId: params.id },
     select: {
       fullName: true,

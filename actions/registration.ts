@@ -56,6 +56,7 @@ export async function createRegistration(input: unknown) {
         gender: validData.gender,
         raceCategory: validData.raceCategory,
         entryFee: selectedRace.fee,
+        vestSize: validData.vestSize || null,
         paymentStatus: 'PENDING',
       },
     });
