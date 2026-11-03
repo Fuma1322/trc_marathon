@@ -117,6 +117,56 @@ export default async function TicketPage({ params }: TicketPageProps) {
                   TRC Compound, Maseru, Lesotho
                 </p>
               </div>
+
+              {/* Race Schedule */}
+              <div className="ticket-print-color mt-8 rounded-2xl border border-green-100 bg-green-50/70 p-5 sm:p-6">
+                <div className="mb-4">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-green-700">
+                    Race Day Schedule
+                  </p>
+                  <h3 className="mt-1 text-xl font-black text-slate-900">Race Start Times</h3>
+                  <p className="mt-1 text-sm text-slate-600">14 November 2026</p>
+                </div>
+
+                <div className="space-y-3">
+                  {[
+                    { category: '21km', label: '21 km Race', time: '05:30 AM' },
+                    { category: '10km', label: '10 km Race', time: '05:45 AM' },
+                    { category: '5km', label: '5 km Race', time: '06:00 AM' },
+                    { category: '2.5km', label: '2.5 km Race', time: '06:15 AM' },
+                  ].map((race) => {
+                    const isCurrentRace = runner.raceCategory === race.category;
+
+                    return (
+                      <div
+                        key={race.category}
+                        className={`flex items-center justify-between gap-3 rounded-xl border p-3 ${
+                          isCurrentRace
+                            ? 'border-green-500 bg-white ring-1 ring-green-500'
+                            : 'border-slate-200 bg-white/70'
+                        }`}
+                      >
+                        <div>
+                          <p className="font-bold text-slate-900">{race.label}</p>
+                          {isCurrentRace && (
+                            <p className="mt-0.5 text-xs font-extrabold uppercase tracking-wider text-green-700">
+                              Your race
+                            </p>
+                          )}
+                        </div>
+
+                        <p className="shrink-0 text-base font-black text-green-700 sm:text-lg">
+                          {race.time}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <p className="mt-4 text-center text-xs text-slate-600">
+                  Please arrive early and be ready before your scheduled start time.
+                </p>
+              </div>
             </div>
 
             <div className="ticket-print-color mt-8 rounded-2xl bg-slate-50 p-5 text-center">
