@@ -1,13 +1,7 @@
-import Hero from '@/components/home/Hero';
-import RaceCategories from '@/components/home/RaceCategories';
-import Features from '@/components/home/Features';
-import Link from 'next/link';
-import { ArrowRight, Footprints } from 'lucide-react';
-
 export default function HomePage() {
   return (
     <>
-      <Hero />
+      {/* <Hero />
       <RaceCategories />
       <Features />
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -46,7 +40,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 }

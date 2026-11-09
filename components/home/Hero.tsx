@@ -161,6 +161,8 @@ export default function Hero() {
                 </div>
               ))}
 
+              {/* 261108215/125 */}
+
               <p className="px-1 pt-1 text-xs leading-5 text-slate-500">
                 Registration fees are in Maloti (M). Choose your preferred distance when
                 registering.
