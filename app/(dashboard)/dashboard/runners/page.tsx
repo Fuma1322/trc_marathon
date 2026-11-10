@@ -1,7 +1,7 @@
 import prisma from '@/lib/db';
+import { redirect } from 'next/navigation';
 import { RACE_CATEGORIES } from '@/lib/constants';
 import { requireOrganizer } from '@/lib/organizer-auth';
-import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
