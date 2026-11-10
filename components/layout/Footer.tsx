@@ -10,10 +10,7 @@ import {
   Flag,
 } from 'lucide-react';
 
-const quickLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Register for the Race', href: '/register' },
-];
+const quickLinks = [{ label: 'Home', href: '/' }];
 
 const paymentMethods = [
   { label: 'M-Pesa', icon: Smartphone },
